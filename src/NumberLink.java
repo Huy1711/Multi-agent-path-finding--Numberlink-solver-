@@ -41,10 +41,10 @@ public class NumberLink {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("");
-        builder.append(row).append(" \t").append(col).append(" \n");
+        builder.append(row).append(" ").append(col).append(" \n");
         for (int i = 1; i < inputs.length; i++) {
             for (int j = 1; j < inputs[i].length; j++) {
-                builder.append(inputs[i][j]).append(" \t");
+                builder.append(inputs[i][j]).append(" ");
             }
             builder.append(" \n");
         }

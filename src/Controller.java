@@ -18,7 +18,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./src/5x5.in");
+        File file = new File("./input/5x5 3.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -61,9 +61,10 @@ public class Controller {
         satSolver = new SATSolver(reader);
         IProblem problem = satSolver.solve("text.cnf");
         if (problem.isSatisfiable()) {
+            System.out.println("SAT");
             int[] model = problem.model();
             int[][] board = numberLink.getInputs();
-
+            List<Integer> arr = new ArrayList<>();
             for (int row = 1; row < board.length; row++) {
                 List<Cell> cells = new ArrayList<>();
                 for (int col = 1; col < board[row].length; col++) {
@@ -79,6 +80,8 @@ public class Controller {
                                 } else {
                                     cell.getPattern().add(value);
                                 }
+                            } else if (value > 4 && value <= CNFConverter.NUM_OF_DIRECTION + numberLink.getMaxNum()) {
+                                arr.add(value - 4);
                             }
                         }
 
@@ -86,32 +89,44 @@ public class Controller {
                 }
                 response.getCells().add(cells);
             }
+
+            printFormat(response);
+
+        } else {
+            System.out.println("UNSAT");
         }
 
-        printFormat(response);
 
     }
 
     public static void printFormat(NumberLinkResponse response) {
         for (int i = 0; i < response.getCells().size(); i++) {
-            for (int j = 0; j < response.getCells().size(); j++) {
-                if (response.getCells().get(i).get(j).getPattern().size() == 1) {
-                    System.out.print(response.getCells().get(i).get(j).getValue());
+            int j = 0;
+            for (j = 0; j < response.getCells().get(i).size(); j++) {
+                if (response.getCells().get(i).get(j) == null) {
+                    System.out.println("  ");
                 } else {
-                    int first = response.getCells().get(i).get(j).getPattern().get(0);
-                    int second = response.getCells().get(i).get(j).getPattern().get(1);
-                    if (first == CNFConverter.LEFT && second == CNFConverter.RIGHT)
-                        System.out.print('-');
-                    else if (first == CNFConverter.LEFT && second == CNFConverter.DOWN)
-                        System.out.print('┐');
-                    else if (first == CNFConverter.LEFT && second == CNFConverter.UP)
-                        System.out.print('┘');
-                    else if (first == CNFConverter.RIGHT && second == CNFConverter.DOWN)
-                        System.out.print('┌');
-                    else if (first == CNFConverter.RIGHT && second == CNFConverter.UP)
-                        System.out.print('└');
-                    else if (first == CNFConverter.UP && second == CNFConverter.DOWN)
-                        System.out.print('│');
+
+                    if (response.getCells().get(i).get(j).getPattern().size() == 1) {
+                        System.out.print(response.getCells().get(i).get(j).getValue() + " ");
+                    } else if (response.getCells().get(i).get(j).getPattern().size() == 2) {
+                        int first = response.getCells().get(i).get(j).getPattern().get(0);
+                        int second = response.getCells().get(i).get(j).getPattern().get(1);
+                        if (first == CNFConverter.LEFT && second == CNFConverter.RIGHT)
+                            System.out.print("- ");
+                        else if (first == CNFConverter.LEFT && second == CNFConverter.DOWN)
+                            System.out.print("┐ ");
+                        else if (first == CNFConverter.LEFT && second == CNFConverter.UP)
+                            System.out.print("┘ ");
+                        else if (first == CNFConverter.RIGHT && second == CNFConverter.DOWN)
+                            System.out.print("┌ ");
+                        else if (first == CNFConverter.RIGHT && second == CNFConverter.UP)
+                            System.out.print("└ ");
+                        else if (first == CNFConverter.UP && second == CNFConverter.DOWN)
+                            System.out.print("│ ");
+                    } else if (response.getCells().get(i).get(j).getPattern().size() == 3) {
+                        System.out.print("* ");
+                    }
                 }
             }
             System.out.println();
