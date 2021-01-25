@@ -18,7 +18,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input/5x5 3.in");
+        File file = new File("./input/9x9 1.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -27,6 +27,10 @@ public class Controller {
         int[][] input = new int[numberLink.getRow() + 1][numberLink.getCol() + 1];
         for (int i = 1; i < numberLink.getRow() + 1; i++) {
             for (int j = 1; j < numberLink.getCol() + 1; j++) {
+//                if (input[i][j] == 0) {
+//                
+//                    sc.nextInt();
+//                }
                 input[i][j] = sc.nextInt();
             }
         }
