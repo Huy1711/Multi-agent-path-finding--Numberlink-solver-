@@ -44,8 +44,9 @@ variable:
   **Connect to a num-cell**  
   
 2) Rule for blank cells:  
+
   **Blank cells have 2 directions and exact 2 directions**  
-    
+  
   +) Have at least 2 direction:  
     xij,1 -> (xij,2 v xij,3 v xij,4)  
     > A blank cell has 2 of 4 directions  
