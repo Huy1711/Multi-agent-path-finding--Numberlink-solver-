@@ -15,14 +15,18 @@ import java.util.Scanner;
 public class Controller {
     private static CNFConverter cnfConverter = new CNFConverter();
     private static SATSolver satSolver;
+    public static int rows;
+    public static int cols;
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input/9x9 11.in");
+        File file = new File("./input/9x9 20.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
+        rows = numberLink.getRow();
         numberLink.setCol(sc.nextInt());
+        cols = numberLink.getCol();
         NumberLink.setMaxNum(sc.nextInt());
         int[][] input = new int[numberLink.getRow() + 1][numberLink.getCol() + 1];
         for (int i = 1; i < numberLink.getRow() + 1; i++) {

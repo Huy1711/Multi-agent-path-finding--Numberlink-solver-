@@ -8,9 +8,11 @@ public class CNFConverter {
     public static final int UP = 3;
     public static final int DOWN = 4;
     public static final int[][] DIR = new int[][] { { -1000, -1000 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
-    public static final int[] m_limit = new int[] { 0, 1, 10, 1, 10 };
+    public static int[] m_limit = new int[] { 0, 1, 10, 1, 10 };
 
     public SatEncoding generateSat(NumberLink numberLink) {
+        m_limit[RIGHT] = numberLink.getRow();
+        m_limit[DOWN] = numberLink.getCol();
         int[][] inputs = numberLink.getInputs();
         int variables = 0;
         int clauses = 0;
@@ -58,13 +60,13 @@ public class CNFConverter {
         if (j <= 1) {
             resultStringList.add(-computePosition(i, j, LEFT, numberLink) + " 0");
         }
-        if (j >= m_limit[RIGHT] - 1) {
+        if (j >= m_limit[RIGHT]) {
             resultStringList.add(-computePosition(i, j, RIGHT, numberLink) + " 0");
         }
         if (i <= 1) {
             resultStringList.add(-computePosition(i, j, UP, numberLink) + " 0");
         }
-        if (i >= m_limit[DOWN] - 1) {
+        if (i >= m_limit[DOWN]) {
             resultStringList.add(-computePosition(i, j, DOWN, numberLink) + " 0");
         }
 
