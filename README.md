@@ -1,4 +1,6 @@
 # Numberlink solver (Flow free)  
+![image](https://user-images.githubusercontent.com/41891935/105691720-2fcd8880-5f30-11eb-8f83-3cc95d9b41f9.png)  
+
 Game: Numberlink by Nikoli  
 Solver: SAT solver  
 Lib: SAT4J  
