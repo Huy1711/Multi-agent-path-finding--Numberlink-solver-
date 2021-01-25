@@ -39,17 +39,17 @@ sample input file:
   **Numbering cells have 1 and only 1 direction**  
   
   +) Have at least 1 direction: Xij,1 v Xij,2 v Xij,3 v Xij,4  
-    > A num-cell have 1 of 4 direction  
+    > A num-cell has 1 of 4 direction  
   +) Have exact 1 direction: (Xij,1 -> -Xij,2) ^ (Xij,1 -> -Xij,3) ^ (Xij,1 -> -Xij,4) ^...  
     > When a direction happens, other directions are disabled  
     
   **Same number are connected**  
   
   +) Reflex:  
-    for instance: When a cell direct to its left, the cell at the left direct to its right.  
+    for instance: When a cell directs to its left, the cell at the left direct to its right.  
     => Xij,1 -> Xi(j-1),2  
   +) Spreading:  
-    When a cell direct to another cell, they have the same value  
+    When a cell directs to another cell, they have the same value  
     for instance: A cell which has value 7 and directs to its left, the left cell has the same value 7  
     => (Yij,7 ^ Xij,1) -> Yi(j-1),7  
     For the same reason we have:  
