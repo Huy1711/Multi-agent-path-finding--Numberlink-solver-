@@ -1,4 +1,4 @@
-Numberlink solver (Flow free)  
+# Numberlink solver (Flow free)  
 Game: Numberlink by Nikoli  
 Solver: SAT solver  
 Lib: SAT4J  
@@ -17,15 +17,17 @@ variable:
             
           Yij,v  
          v : value (cells are connected have the same value)  
-**Rule for numbering cells:  
-  **Numbering cells have 1 and only 1 direction  
+**Rule for numbering cells:  **  
+  **Numbering cells have 1 and only 1 direction  **  
   
-  +) Have at least 1 direction: xij,1 v xij,2 v xij,3 v xij,4  
-    A num-cell have 1 of 4 direction  
-  +) Have exact 1 direction: (xij,1 -> -xij,2) ^ (xij,1 -> -xij,3) ^ (xij,1 -> -xij,4) ^...  
-    When a direction happens, other directions are disabled  
+  +) Have at least 1 direction:  
+    xij,1 v xij,2 v xij,3 v xij,4  
+    > A num-cell have 1 of 4 direction  
+  +) Have exact 1 direction: 
+    (xij,1 -> -xij,2) ^ (xij,1 -> -xij,3) ^ (xij,1 -> -xij,4) ^...  
+    > When a direction happens, other directions are disabled  
     
-  **Same number are connected  
+  **Same number are connected  **  
   
   +) Reflex:  
     for instance: When a cell direct to its left, the cell at the left direct to its right.  
@@ -38,20 +40,22 @@ variable:
     When a cell doesn't have value 8, other connected cell don't have value 8  
     => (-Yij,8 ^ Xij,1) -> -Yi(j-1),8  
       
-  **Connect to a num-cell  
+  **Connect to a num-cell  **  
       
-**Rule for blank cells:  
-  **Blank cells have 2 directions and exact 2 directions  
+**Rule for blank cells:  **  
+  **Blank cells have 2 directions and exact 2 directions  **  
     
-  +) Have at least 2 direction: xij,1 -> (xij,2 v xij,3 v xij,4)  
-    A blank cell has 2 of 4 directions  
-  +) Have exact 2 direction: -xij,1 -> (-xij,2 v -xij,3 v -xij,4)  
-    When 2 directions happen, other directions are disabled  
+  +) Have at least 2 direction:  
+    xij,1 -> (xij,2 v xij,3 v xij,4)  
+    > A blank cell has 2 of 4 directions  
+  +) Have exact 2 direction: 
+    -xij,1 -> (-xij,2 v -xij,3 v -xij,4)  
+    > When 2 directions happen, other directions are disabled  
       
-  **Cells have the same value are connected:  
+  **Cells have the same value are connected:  **  
      
    Similar to "Same number are connected" rule for num-cell  
    
-  **Limit boundary:  
+  **Limit boundary:  **  
     
   The directions of cells at the edge to the outside are disabled  
