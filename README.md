@@ -17,7 +17,8 @@ variable:
             
           Yij,v  
          v : value (cells are connected have the same value)  
-1) Rule for numbering cells:   
+         
+***1) Rule for numbering cells:***   
 
   **Numbering cells have 1 and only 1 direction**  
   
@@ -43,7 +44,7 @@ variable:
       
   **Connect to a num-cell**  
   
-2) Rule for blank cells:  
+***2) Rule for blank cells:***  
 
   **Blank cells have 2 directions and exact 2 directions**  
   
