@@ -58,13 +58,13 @@ public class CNFConverter {
         if (j <= 1) {
             resultStringList.add(-computePosition(i, j, LEFT, numberLink) + " 0");
         }
-        if (j >= m_limit[RIGHT]) {
+        if (j >= m_limit[RIGHT] - 1) {
             resultStringList.add(-computePosition(i, j, RIGHT, numberLink) + " 0");
         }
         if (i <= 1) {
             resultStringList.add(-computePosition(i, j, UP, numberLink) + " 0");
         }
-        if (i > m_limit[DOWN]) {
+        if (i >= m_limit[DOWN] - 1) {
             resultStringList.add(-computePosition(i, j, DOWN, numberLink) + " 0");
         }
 
