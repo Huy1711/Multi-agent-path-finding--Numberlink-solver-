@@ -8,7 +8,8 @@ I) About Numberlink by Nikoli:
 http://www.nikoli.co.jp/en/puzzles/numberlink.html  
   
 II) SAT Converter:  
-Input file:  
+
+*Input file:  
 first line contains 2 numbers M and N. M : number of rows, N : number of collumns.  
 second line contains 1 number which is the largest number.  
 next lines contain numberlink game size MxN.  
@@ -23,7 +24,7 @@ sample input file:
 0 1 0 0 0  
   
 
-Variables: 
+*Variables: 
 
           Xij,k for each cell  
          i : row, j : collumn, k : direction (LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4)  
@@ -38,10 +39,10 @@ Variables:
   **Numbering cells have 1 and only 1 direction**  
   
   +) Have at least 1 direction:  
-    xij,1 v xij,2 v xij,3 v xij,4  
+    Xij,1 v Xij,2 v Xij,3 v Xij,4  
     > A num-cell have 1 of 4 direction  
   +) Have exact 1 direction: 
-    (xij,1 -> -xij,2) ^ (xij,1 -> -xij,3) ^ (xij,1 -> -xij,4) ^...  
+    (Xij,1 -> -Xij,2) ^ (Xij,1 -> -Xij,3) ^ (Xij,1 -> -Xij,4) ^...  
     > When a direction happens, other directions are disabled  
     
   **Same number are connected**  
@@ -64,10 +65,10 @@ Variables:
   **Blank cells have 2 directions and exact 2 directions**  
   
   +) Have at least 2 direction:  
-    xij,1 -> (xij,2 v xij,3 v xij,4)  
+    Xij,1 -> (Xij,2 v Xij,3 v Xij,4)  
     > A blank cell has 2 of 4 directions  
   +) Have exact 2 direction: 
-    -xij,1 -> (-xij,2 v -xij,3 v -xij,4)  
+    -Xij,1 -> (-Xij,2 v -Xij,3 v -Xij,4)  
     > When 2 directions happen, other directions are disabled  
       
   **Cells have the same value are connected:**  
