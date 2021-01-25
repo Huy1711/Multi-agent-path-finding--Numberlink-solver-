@@ -8,7 +8,9 @@ Database: Flow free game
 http://www.nikoli.co.jp/en/puzzles/numberlink.html  
   
 2) SAT Converter:  
-variable: Xij,k for each cell  
+variable: 
+
+          Xij,k for each cell  
          i : row, j : collumn, k : direction (LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4)  
          M : number of rows, N : number of collumns  
          => number of X is MxNx4  
@@ -35,21 +37,21 @@ variable: Xij,k for each cell
     For the same reason we have:  
     When a cell doesn't have value 8, other connected cell don't have value 8  
     => (-Yij,8 ^ Xij,1) -> -Yi(j-1),8  
-    
-  **Connect to a num-cell
-    
+      
+  **Connect to a num-cell  
+      
 **Rule for blank cells:  
-  **Blank cells have 2 directions and exact 2 directions
-  
-  +) Have at least 2 direction: xij,1 -> (xij,2 v xij,3 v xij,4)  
-    A blank cell has 2 of 4 directions
-  +) Have exact 2 direction: -xij,1 -> (-xij,2 v -xij,3 v -xij,4)
-    When 2 directions happen, other directions are disabled
+  **Blank cells have 2 directions and exact 2 directions  
     
-  **Cells have the same value are connected:
+  +) Have at least 2 direction: xij,1 -> (xij,2 v xij,3 v xij,4)  
+    A blank cell has 2 of 4 directions  
+  +) Have exact 2 direction: -xij,1 -> (-xij,2 v -xij,3 v -xij,4)  
+    When 2 directions happen, other directions are disabled  
+      
+  **Cells have the same value are connected:  
+     
+   Similar to "Same number are connected" rule for num-cell  
    
-   Similar to "Same number are connected" rule for num-cell
-   
-  **Limit boundary:
-  
-  The directions of cells at the edge to the outside are disabled
+  **Limit boundary:  
+    
+  The directions of cells at the edge to the outside are disabled  
