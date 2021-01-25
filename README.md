@@ -8,6 +8,21 @@ I) About Numberlink by Nikoli:
 http://www.nikoli.co.jp/en/puzzles/numberlink.html  
   
 II) SAT Converter:  
+Input file:  
+first line contains 2 numbers M and N. M : number of rows, N : number of collumns.  
+second line contains 1 number which is the largest number.  
+next lines contain numberlink game size MxN.  
+
+sample input file:  
+5 5  
+4  
+0 0 0 0 0  
+2 0 0 1 0  
+0 0 0 0 0  
+1 0 0 2 0  
+4 0 4 3 3  
+  
+
 Variables: 
 
           Xij,k for each cell  
