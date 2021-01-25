@@ -38,11 +38,9 @@ sample input file:
 
   **Numbering cells have 1 and only 1 direction**  
   
-  +) Have at least 1 direction:  
-    Xij,1 v Xij,2 v Xij,3 v Xij,4  
+  +) Have at least 1 direction: Xij,1 v Xij,2 v Xij,3 v Xij,4  
     > A num-cell have 1 of 4 direction  
-  +) Have exact 1 direction: 
-    (Xij,1 -> -Xij,2) ^ (Xij,1 -> -Xij,3) ^ (Xij,1 -> -Xij,4) ^...  
+  +) Have exact 1 direction: (Xij,1 -> -Xij,2) ^ (Xij,1 -> -Xij,3) ^ (Xij,1 -> -Xij,4) ^...  
     > When a direction happens, other directions are disabled  
     
   **Same number are connected**  
@@ -64,11 +62,9 @@ sample input file:
 
   **Blank cells have 2 directions and exact 2 directions**  
   
-  +) Have at least 2 direction:  
-    Xij,1 -> (Xij,2 v Xij,3 v Xij,4)  
+  +) Have at least 2 direction: Xij,1 -> (Xij,2 v Xij,3 v Xij,4)  
     > A blank cell has 2 of 4 directions  
-  +) Have exact 2 direction: 
-    -Xij,1 -> (-Xij,2 v -Xij,3 v -Xij,4)  
+  +) Have exact 2 direction: -Xij,1 -> (-Xij,2 v -Xij,3 v -Xij,4)  
     > When 2 directions happen, other directions are disabled  
       
   **Cells have the same value are connected:**  
