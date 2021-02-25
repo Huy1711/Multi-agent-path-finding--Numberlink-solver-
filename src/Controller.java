@@ -20,7 +20,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input/9x9 20.in");
+        File file = new File("./input/15x15 1.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -114,9 +114,13 @@ public class Controller {
                 if (response.getCells().get(i).get(j) == null) {
                     System.out.println("  ");
                 } else {
-
                     if (response.getCells().get(i).get(j).getPattern().size() == 1) {
-                        System.out.print(response.getCells().get(i).get(j).getValue() + " ");
+                        int num = response.getCells().get(i).get(j).getValue();
+                        if (num <= 9) {
+                            System.out.print(num + " ");
+                        } else {
+                            System.out.print(num);
+                        }
                     } else if (response.getCells().get(i).get(j).getPattern().size() == 2) {
                         int first = response.getCells().get(i).get(j).getPattern().get(0);
                         int second = response.getCells().get(i).get(j).getPattern().get(1);
@@ -134,6 +138,8 @@ public class Controller {
                             System.out.print("│ ");
                     } else if (response.getCells().get(i).get(j).getPattern().size() == 3) {
                         System.out.print("* ");
+                    } else {
+                        System.out.println("  ");
                     }
                 }
             }

@@ -8,11 +8,12 @@ public class CNFConverter {
     public static final int UP = 3;
     public static final int DOWN = 4;
     public static final int[][] DIR = new int[][] { { -1000, -1000 }, { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
-    public static int[] m_limit = new int[] { 0, 1, 10, 1, 10 };
+    public static int[] m_limit = new int[] { 0, 1, 0, 1, 0 };
 
     public SatEncoding generateSat(NumberLink numberLink) {
         m_limit[RIGHT] = numberLink.getRow();
         m_limit[DOWN] = numberLink.getCol();
+        System.out.println(m_limit[RIGHT] + " " + m_limit[DOWN]);
         int[][] inputs = numberLink.getInputs();
         int variables = 0;
         int clauses = 0;
