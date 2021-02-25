@@ -20,7 +20,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input/15x15 1.in");
+        File file = new File("./input/15x15 7.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -67,9 +67,17 @@ public class Controller {
         DimacsReader reader = new DimacsReader(SolverFactory.newDefault());
         reader.parseInstance("text.cnf");
         satSolver = new SATSolver(reader);
+
+
         IProblem problem = satSolver.solve("text.cnf");
+
+
+        long t1 = System.currentTimeMillis();
         if (problem.isSatisfiable()) {
             System.out.println("SAT");
+            long t2 = System.currentTimeMillis();
+            System.out.println("Total time: " + (t2 - t1) + "ms.\n");
+
             int[] model = problem.model();
             int[][] board = numberLink.getInputs();
             List<Integer> arr = new ArrayList<>();
