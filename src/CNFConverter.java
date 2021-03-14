@@ -27,14 +27,17 @@ public class CNFConverter {
                     clauses++;
 
                     List<String> rule2 = exact_one_direction(i, j, numberLink);
-                    List<String> rule1 = connectToNumCell(i, j, inputs[i][j], numberLink);
                     List<String> rule3 = connect_same_number(i, j, numberLink);
+                    List<String> rule1 = connectToNumCell(i, j, inputs[i][j], numberLink);
+                    List<String> rule4 = limit_boundary(i, j, numberLink);
 
-                    clauses += rule1.size() + rule2.size() + rule3.size();
+
+                    clauses += rule1.size() + rule2.size() + rule3.size() + rule4.size();
 
                     rules.addAll(rule2);
                     rules.addAll(rule1);
                     rules.addAll(rule3);
+                    rules.addAll(rule4);
                 } else {
 
                     List<String> rule1 = has_two_directions(i, j, numberLink);
