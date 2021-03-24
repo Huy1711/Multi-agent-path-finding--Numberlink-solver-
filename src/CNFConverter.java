@@ -20,41 +20,43 @@ public class CNFConverter {
         List<String> rules = new ArrayList<>();
         for (int i = 1; i < inputs.length; i++) {
             for (int j = 1; j < inputs[i].length; j++) {
+
+                List<String> baseRule2 = connect_same_number(i, j, numberLink);
+                List<String> baseRule3 = limit_boundary(i, j, numberLink);
+                List<String> baseRule1 = onlyOneValue(i, j, numberLink);
+                String baseRule = atLeastOneDirection(i, j, numberLink);
+                rules.add(baseRule);
+                clauses++;
+
+                rules.addAll(baseRule3);
+                rules.addAll(baseRule2);
+                rules.addAll(baseRule1);
+                clauses += baseRule2.size() + baseRule3.size() + baseRule1.size();
                 // cell has number
                 if (inputs[i][j] != 0) {
-                    String baseRule = atLeastOneDirection(i, j, numberLink);
-                    rules.add(baseRule);
-                    clauses++;
 
-                    List<String> rule2 = exact_one_direction(i, j, numberLink);
-                    List<String> rule3 = connect_same_number(i, j, numberLink);
-                    List<String> rule1 = connectToNumCell(i, j, inputs[i][j], numberLink);
-                    List<String> rule4 = limit_boundary(i, j, numberLink);
+                    List<String> rule1 = exact_one_direction(i, j, numberLink);
+                    List<String> rule2 = onlyOneValueFromInput(i, j, inputs[i][j], numberLink);
 
+                    clauses += rule1.size() + rule2.size();
 
-                    clauses += rule1.size() + rule2.size() + rule3.size() + rule4.size();
-
-                    rules.addAll(rule2);
                     rules.addAll(rule1);
-                    rules.addAll(rule3);
-                    rules.addAll(rule4);
+                    rules.addAll(rule2);
+                // blank cell
                 } else {
 
                     List<String> rule1 = has_two_directions(i, j, numberLink);
-                    List<String> rule2 = connect_same_number(i, j, numberLink);
-                    List<String> rule3 = limit_boundary(i, j, numberLink);
 
-                    clauses += rule1.size() + rule2.size() + rule3.size();
+                    clauses += rule1.size();
 
                     rules.addAll(rule1);
-                    rules.addAll(rule3);
-                    rules.addAll(rule2);
-
                 }
 
             }
         }
-        variables = numberLink.getRow() * numberLink.getCol() * (NUM_OF_DIRECTION + numberLink.getMaxNum() + numberLink.getRow() * numberLink.getCol());
+        variables = numberLink.getRow() * numberLink.getCol() * (NUM_OF_DIRECTION + numberLink.getMaxNum());
+        System.out.println("expected var number: " + variables);
+        System.out.println("clauses size: " + rules.size());
         return new SatEncoding(rules, clauses, variables);
     }
 
@@ -137,13 +139,19 @@ public class CNFConverter {
                     tmpString += computePosition(i, j + j0, q, numberLink) + " ";
                     tmpString += "0";
                     resultStringList.add(tmpString);
-                    // ô không có giá trị 7 có kết nối sang phải -> ô bên phải không có giá trị 7
-                    tmpString = -computePosition(i, j, k, numberLink) + " ";
-                    tmpString += computePosition(i, j, q, numberLink) + " ";
-                    tmpString += -computePosition(i, j + j0, q, numberLink) + " ";
-                    tmpString += "0";
-                    resultStringList.add(tmpString);
                 }
+
+//                for (int q = NUM_OF_DIRECTION + 1; q <= NUM_OF_DIRECTION + numberLink.getMaxNum(); q++) {
+//                    String tmpString = "";
+//                    // ô có có kết nối sang phải ^ ô bên phải có giá trị 7 -> ô có giá trị 7
+//                    tmpString = -computePosition(i, j, k, numberLink) + " ";
+//                    tmpString += -computePosition(i, j + j0, q, numberLink) + " ";
+//                    tmpString += computePosition(i, j, q, numberLink) + " ";
+//                    tmpString += "0";
+//                    resultStringList.add(tmpString);
+//                }
+
+
             } else if ((k == DOWN && i + i0 <= m_limit[k]) || (k == UP && i + i0 >= m_limit[k])) {
                 atleastOneDirection = (-computePosition(i, j, k, numberLink)) + " ";
                 switch (k) {
@@ -163,13 +171,16 @@ public class CNFConverter {
                     tmpString += computePosition(i + i0, j, q, numberLink) + " ";
                     tmpString += "0";
                     resultStringList.add(tmpString);
-
-                    tmpString = -computePosition(i, j, k, numberLink) + " ";
-                    tmpString += computePosition(i, j, q, numberLink) + " ";
-                    tmpString += -computePosition(i + i0, j, q, numberLink) + " ";
-                    tmpString += "0";
-                    resultStringList.add(tmpString);
                 }
+
+//                for (int q = NUM_OF_DIRECTION + 1; q <= NUM_OF_DIRECTION + numberLink.getMaxNum(); q++) {
+//                    String tmpString = "";
+//                    tmpString = -computePosition(i, j, k, numberLink) + " ";
+//                    tmpString += -computePosition(i, j + j0, q, numberLink) + " ";
+//                    tmpString += computePosition(i, j, q, numberLink) + " ";
+//                    tmpString += "0";
+//                    resultStringList.add(tmpString);
+//                }
             }
         }
         return resultStringList;
@@ -194,7 +205,7 @@ public class CNFConverter {
     }
 
 
-    private List<String> connectToNumCell(int i, int j, int num, NumberLink numberLink) {
+    private List<String> onlyOneValueFromInput(int i, int j, int num, NumberLink numberLink) {
         int result = computePosition(i, j, NUM_OF_DIRECTION + num, numberLink);
         List<String> resultStringList = new ArrayList<>();
 
@@ -202,13 +213,36 @@ public class CNFConverter {
         exactNumLine += result + " 0";
         resultStringList.add(exactNumLine);
 
-        for (int k = 1; k < numberLink.getMaxNum(); k++) {
+        for (int k = 1; k <= numberLink.getMaxNum(); k++) {
             if (k != num) {
                 exactNumLine = -computePosition(i, j, NUM_OF_DIRECTION + k, numberLink) + " 0";
                 resultStringList.add(exactNumLine);
             }
         }
         return resultStringList;
+    }
+
+    private List<String> onlyOneValue(int i, int j, NumberLink numberLink) {
+        List<String> clauseArr = new ArrayList<>();
+        String exactNumLine = "";
+
+        for (int k = 1; k <= numberLink.getMaxNum(); k++) {
+            exactNumLine += computePosition(i, j, NUM_OF_DIRECTION + k, numberLink) + " ";
+        }
+        exactNumLine += "0";
+        clauseArr.add(exactNumLine);
+
+        for (int k = 1; k <= numberLink.getMaxNum(); k++) {
+            for (int q = 1; q <= numberLink.getMaxNum(); q++) {
+                String firstClause = -computePosition(i, j, NUM_OF_DIRECTION + k, numberLink) + " ";
+                if (q != k) {
+                    firstClause += -computePosition(i, j, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    firstClause += "0";
+                    clauseArr.add(firstClause);
+                }
+            }
+        }
+        return clauseArr;
     }
 
     private String atLeastOneDirection(int i, int j, NumberLink numberLink) {
@@ -253,4 +287,5 @@ public class CNFConverter {
         return positionValue - (row - 1) * (NUM_OF_DIRECTION + numberLink.getMaxNum()) * numberLink.getCol() -
                 (col - 1) * (NUM_OF_DIRECTION + numberLink.getMaxNum());
     }
+
 }

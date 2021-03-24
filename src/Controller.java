@@ -20,7 +20,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input/15x15 3.in");
+        File file = new File("./input 2/10x10 123.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -77,17 +77,22 @@ public class Controller {
             System.out.println("SAT");
             long t2 = System.currentTimeMillis();
             System.out.println("Total time: " + (t2 - t1) + "ms.\n");
+            System.out.println("Var: " + problem.nVars());
+            System.out.println("Constraint: " + problem.nConstraints());
 
             int[] model = problem.model();
             int[][] board = numberLink.getInputs();
-            List<Integer> arr = new ArrayList<>();
+
+
             for (int row = 1; row < board.length; row++) {
                 List<Cell> cells = new ArrayList<>();
                 for (int col = 1; col < board[row].length; col++) {
                     Cell cell = null;
+
                     for (int k = 0; k < model.length; k++) {
                         if (model[k] > 0) {
                             int value = cnfConverter.getValueOf(row, col, model[k], numberLink);
+
                             if (value <= 4 && value >= 1) {
                                 if (cell == null) {
                                     cell = new Cell(row-1, col-1, board[row][col]);
@@ -96,8 +101,8 @@ public class Controller {
                                 } else {
                                     cell.getPattern().add(value);
                                 }
-                            } else if (value > 4 && value <= CNFConverter.NUM_OF_DIRECTION + numberLink.getMaxNum()) {
-                                arr.add(value - 4);
+                            } else if (board[row][col] == 0 && value >= 5 && value < 5 + numberLink.getMaxNum()) {
+                                cell.value = value - 4;
                             }
                         }
 
@@ -106,7 +111,7 @@ public class Controller {
                 response.getCells().add(cells);
             }
 
-            printFormat(response);
+        printFormat(response);
 
         } else {
             System.out.println("UNSAT");
@@ -119,37 +124,40 @@ public class Controller {
         for (int i = 0; i < response.getCells().size(); i++) {
             int j = 0;
             for (j = 0; j < response.getCells().get(i).size(); j++) {
-                if (response.getCells().get(i).get(j) == null) {
-                    System.out.println("  ");
-                } else {
-                    if (response.getCells().get(i).get(j).getPattern().size() == 1) {
-                        int num = response.getCells().get(i).get(j).getValue();
-                        if (num <= 9) {
-                            System.out.print(num + " ");
-                        } else {
-                            System.out.print(num);
-                        }
-                    } else if (response.getCells().get(i).get(j).getPattern().size() == 2) {
-                        int first = response.getCells().get(i).get(j).getPattern().get(0);
-                        int second = response.getCells().get(i).get(j).getPattern().get(1);
-                        if (first == CNFConverter.LEFT && second == CNFConverter.RIGHT)
-                            System.out.print("- ");
-                        else if (first == CNFConverter.LEFT && second == CNFConverter.DOWN)
-                            System.out.print("┐ ");
-                        else if (first == CNFConverter.LEFT && second == CNFConverter.UP)
-                            System.out.print("┘ ");
-                        else if (first == CNFConverter.RIGHT && second == CNFConverter.DOWN)
-                            System.out.print("┌ ");
-                        else if (first == CNFConverter.RIGHT && second == CNFConverter.UP)
-                            System.out.print("└ ");
-                        else if (first == CNFConverter.UP && second == CNFConverter.DOWN)
-                            System.out.print("│ ");
-                    } else if (response.getCells().get(i).get(j).getPattern().size() == 3) {
-                        System.out.print("* ");
+
+//                int num = response.getCells().get(i).get(j).getValue();
+//                if (num <= 9) {
+//                    System.out.print(num + " ");
+//                } else {
+//                    System.out.print(num);
+//                }
+
+                if (response.getCells().get(i).get(j).getPattern().size() == 1) {
+                    int num = response.getCells().get(i).get(j).getValue();
+                    if (num <= 9) {
+                        System.out.print(num + " ");
                     } else {
-                        System.out.println("  ");
+                        System.out.print(num);
                     }
+                } else if (response.getCells().get(i).get(j).getPattern().size() == 2) {
+                    int first = response.getCells().get(i).get(j).getPattern().get(0);
+                    int second = response.getCells().get(i).get(j).getPattern().get(1);
+                    if (first == CNFConverter.LEFT && second == CNFConverter.RIGHT)
+                        System.out.print("- ");
+                    else if (first == CNFConverter.LEFT && second == CNFConverter.DOWN)
+                        System.out.print("┐ ");
+                    else if (first == CNFConverter.LEFT && second == CNFConverter.UP)
+                        System.out.print("┘ ");
+                    else if (first == CNFConverter.RIGHT && second == CNFConverter.DOWN)
+                        System.out.print("┌ ");
+                    else if (first == CNFConverter.RIGHT && second == CNFConverter.UP)
+                        System.out.print("└ ");
+                    else if (first == CNFConverter.UP && second == CNFConverter.DOWN)
+                        System.out.print("│ ");
+                } else {
+                    System.out.println("  ");
                 }
+
             }
             System.out.println();
         }
