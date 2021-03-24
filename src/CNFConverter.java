@@ -36,7 +36,7 @@ public class CNFConverter {
                 if (inputs[i][j] != 0) {
 
                     List<String> rule1 = exact_one_direction(i, j, numberLink);
-                    List<String> rule2 = onlyOneValueFromInput(i, j, inputs[i][j], numberLink);
+                    List<String> rule2 = valueFromInput(i, j, inputs[i][j], numberLink);
 
                     clauses += rule1.size() + rule2.size();
 
@@ -151,7 +151,6 @@ public class CNFConverter {
 //                    resultStringList.add(tmpString);
 //                }
 
-
             } else if ((k == DOWN && i + i0 <= m_limit[k]) || (k == UP && i + i0 >= m_limit[k])) {
                 atleastOneDirection = (-computePosition(i, j, k, numberLink)) + " ";
                 switch (k) {
@@ -205,7 +204,7 @@ public class CNFConverter {
     }
 
 
-    private List<String> onlyOneValueFromInput(int i, int j, int num, NumberLink numberLink) {
+    private List<String> valueFromInput(int i, int j, int num, NumberLink numberLink) {
         int result = computePosition(i, j, NUM_OF_DIRECTION + num, numberLink);
         List<String> resultStringList = new ArrayList<>();
 
@@ -213,12 +212,6 @@ public class CNFConverter {
         exactNumLine += result + " 0";
         resultStringList.add(exactNumLine);
 
-        for (int k = 1; k <= numberLink.getMaxNum(); k++) {
-            if (k != num) {
-                exactNumLine = -computePosition(i, j, NUM_OF_DIRECTION + k, numberLink) + " 0";
-                resultStringList.add(exactNumLine);
-            }
-        }
         return resultStringList;
     }
 

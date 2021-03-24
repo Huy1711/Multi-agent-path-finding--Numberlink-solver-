@@ -20,7 +20,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input 2/10x10 123.in");
+        File file = new File("./input 2/15x15 121.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
