@@ -24,20 +24,18 @@ public class CNFConverter {
             for (int j = 1; j < inputs[i].length; j++) {
 
                 List<String> baseRule2 = connect_same_number(i, j, numberLink);
-//                List<String> baseRule3 = limit_boundary(i, j, numberLink);
                 List<String> baseRule1 = onlyOneValue(i, j, numberLink);
                 String baseRule = atLeastOneDirection(i, j, numberLink);
                 rules.add(baseRule);
                 clauses++;
+                clauses += baseRule2.size() + baseRule1.size();
 
-//                rules.addAll(baseRule3);
                 rules.addAll(baseRule2);
                 rules.addAll(baseRule1);
-                clauses += baseRule2.size() + /*baseRule3.size()*/ + baseRule1.size();
+
                 // cell has number
                 if (inputs[i][j] != 0) {
 
-//                    List<String> rule1 = exact_one_direction(i, j, numberLink);
                     List<String> rule0 = valueFromInput(i, j, inputs[i][j], numberLink);
 
                     List<String> rule2 = new ArrayList<>();
@@ -69,10 +67,31 @@ public class CNFConverter {
                 } else {
 
 //                    List<String> rule1 = has_two_directions(i, j, numberLink);
-//
-//                    clauses += rule1.size();
-//
-//                    rules.addAll(rule1);
+
+                    List<String> rule2 = new ArrayList<>();
+                    if (isLUCornerCell(i, j)) {
+                        rule2 = LUCorner_has_two_direction(i, j, numberLink);
+                    } else if (isRUCornerCell(i, j)) {
+                        rule2 = RUCorner_has_two_direction(i, j, numberLink);
+                    } else if (isRDCornerCell(i, j)) {
+                        rule2 = RDCorner_has_two_direction(i, j, numberLink);
+                    } else if (isLDCornerCell(i, j)) {
+                        rule2 = LDCorner_has_two_direction(i, j, numberLink);
+                    } else if (isLEdgeCell(i, j)) {
+                        rule2 = LEdge_has_two_direction(i, j, numberLink);
+                    } else if (isREdgeCell(i, j)) {
+                        rule2 = REdge_has_two_direction(i, j, numberLink);
+                    } else if (isUEdgeCell(i, j)) {
+                        rule2 = UEdge_has_two_direction(i, j, numberLink);
+                    } else if (isDEdgeCell(i, j)) {
+                        rule2 = DEdge_has_two_direction(i, j, numberLink);
+                    } else {
+                        rule2 = has_two_directions(i, j, numberLink);
+                    }
+
+                    clauses += rule2.size();
+
+                    rules.addAll(rule2);
                 }
 
             }
@@ -81,6 +100,7 @@ public class CNFConverter {
         System.out.println("clauses size: " + rules.size());
         return new SatEncoding(rules, clauses, variables);
     }
+
 
     boolean isLUCornerCell(int i, int j) {
         return (i == 1 && j == 1);
@@ -114,43 +134,27 @@ public class CNFConverter {
         return (i == 1 && (j > 1 || j < m_limit[RIGHT]));
     }
 
-
     private List<String> LEdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-//        String firstClause = "";
-//        firstClause += calculatePosition(i, j, RIGHT, numberLink, true);
-//        firstClause += calculatePosition(i, j, UP, numberLink, true);
-//        firstClause += calculatePosition(i, j, DOWN, numberLink, true);
-//        firstClause += "0";
-//        resultStringList.add(firstClause);
-
         String secondClause = "";
-//        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
-//            for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
-//                if (k != LEFT && q != LEFT) {
-                    secondClause = -computePosition(i, j, LEFT, numberLink) + " ";
-//                    if (q != k) {
-//                        secondClause += -computePosition(i, j, q, numberLink) + " ";
-//                        secondClause += "0";
+        for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
+            for (int q = k + 1; q <= NUM_OF_DIRECTION; q++) {
+                if (k != LEFT && q != LEFT) {
+                    secondClause = -computePosition(i, j, k, numberLink) + " ";
+                    if (q != k) {
+                        secondClause += -computePosition(i, j, q, numberLink) + " ";
+                        secondClause += "0";
                         resultStringList.add(secondClause);
-//                    }
-//                }
-//            }
-//        }
+                    }
+                }
+            }
+        }
 
         return resultStringList;
     }
 
     private List<String> REdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        for (int k = 1; k < NUM_OF_DIRECTION; k++) {
-            if (k != RIGHT) {
-                firstClause += computePosition(i, j, k, numberLink) + " ";
-            }
-        }
-        firstClause += "0";
-        resultStringList.add(firstClause);
 
         String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
@@ -171,14 +175,6 @@ public class CNFConverter {
 
     private List<String> DEdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        for (int k = 1; k < NUM_OF_DIRECTION; k++) {
-            if (k != DOWN) {
-                firstClause += computePosition(i, j, k, numberLink) + " ";
-            }
-        }
-        firstClause += "0";
-        resultStringList.add(firstClause);
 
         String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
@@ -199,14 +195,6 @@ public class CNFConverter {
 
     private List<String> UEdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        for (int k = 1; k < NUM_OF_DIRECTION; k++) {
-            if (k != UP) {
-                firstClause += computePosition(i, j, k, numberLink) + " ";
-            }
-        }
-        firstClause += "0";
-        resultStringList.add(firstClause);
 
         String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
@@ -227,12 +215,6 @@ public class CNFConverter {
 
     private List<String> LUConner_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        firstClause += computePosition(i, j, DOWN, numberLink) + " ";
-        firstClause += computePosition(i, j, RIGHT, numberLink) + " ";
-        firstClause += "0";
-        resultStringList.add(firstClause);
-
         String secondClause = "";
         secondClause += -computePosition(i, j, DOWN, numberLink) + " ";
         secondClause += -computePosition(i, j, RIGHT, numberLink) + " ";
@@ -243,12 +225,6 @@ public class CNFConverter {
 
     private List<String> RUConner_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        firstClause += computePosition(i, j, DOWN, numberLink) + " ";
-        firstClause += computePosition(i, j, LEFT, numberLink) + " ";
-        firstClause += "0";
-        resultStringList.add(firstClause);
-
         String secondClause = "";
         secondClause += -computePosition(i, j, DOWN, numberLink) + " ";
         secondClause += -computePosition(i, j, LEFT, numberLink) + " ";
@@ -259,12 +235,6 @@ public class CNFConverter {
 
     private List<String> RDConner_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        firstClause += computePosition(i, j, UP, numberLink) + " ";
-        firstClause += computePosition(i, j, LEFT, numberLink) + " ";
-        firstClause += "0";
-        resultStringList.add(firstClause);
-
         String secondClause = "";
         secondClause += -computePosition(i, j, UP, numberLink) + " ";
         secondClause += -computePosition(i, j, LEFT, numberLink) + " ";
@@ -275,12 +245,6 @@ public class CNFConverter {
 
     private List<String> LDConner_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
-        String firstClause = "";
-        firstClause += computePosition(i, j, UP, numberLink) + " ";
-        firstClause += computePosition(i, j, RIGHT, numberLink) + " ";
-        firstClause += "0";
-        resultStringList.add(firstClause);
-
         String secondClause = "";
         secondClause += -computePosition(i, j, UP, numberLink) + " ";
         secondClause += -computePosition(i, j, RIGHT, numberLink) + " ";
@@ -289,55 +253,207 @@ public class CNFConverter {
         return resultStringList;
     }
 
-    // X
-//    private List<String> limit_boundary(int i, int j, NumberLink numberLink) {
-//        List<String> resultStringList = new ArrayList<>();
-//
-//        if (j <= 1) {
-//            resultStringList.add(-computePosition(i, j, LEFT, numberLink) + " 0");
-//        }
-//        if (j >= m_limit[RIGHT]) {
-//            resultStringList.add(-computePosition(i, j, RIGHT, numberLink) + " 0");
-//        }
-//        if (i <= 1) {
-//            resultStringList.add(-computePosition(i, j, UP, numberLink) + " 0");
-//        }
-//        if (i >= m_limit[DOWN]) {
-//            resultStringList.add(-computePosition(i, j, DOWN, numberLink) + " 0");
-//        }
-//
-//        return resultStringList;
-//    }
+    private List<String> LEdge_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resulStringList = new ArrayList<>();
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != LEFT) {
+                String firstClause = -computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != LEFT && q != k) {
+                        firstClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                }
+                firstClause += "0";
+                resulStringList.add(firstClause);
+            }
+        }
+
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != LEFT) {
+                String secondClause = computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != LEFT && q != k) {
+                        secondClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                    secondClause += "0";
+                    resulStringList.add(secondClause);
+                }
+            }
+        }
+        return resulStringList;
+    }
+
+    private List<String> DEdge_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resulStringList = new ArrayList<>();
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != DOWN) {
+                String firstClause = -computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != DOWN && q != k) {
+                        firstClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                }
+                firstClause += "0";
+                resulStringList.add(firstClause);
+            }
+        }
+
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != DOWN) {
+                String secondClause = computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != DOWN && q != k) {
+                        secondClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                    secondClause += "0";
+                    resulStringList.add(secondClause);
+                }
+            }
+        }
+        return resulStringList;
+    }
+
+    private List<String> REdge_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resulStringList = new ArrayList<>();
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != RIGHT) {
+                String firstClause = -computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != RIGHT && q != k) {
+                        firstClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                }
+                firstClause += "0";
+                resulStringList.add(firstClause);
+            }
+        }
+
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != RIGHT) {
+                String secondClause = computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != RIGHT && q != k) {
+                        secondClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                    secondClause += "0";
+                    resulStringList.add(secondClause);
+                }
+            }
+        }
+        return resulStringList;
+    }
+
+    private List<String> UEdge_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resulStringList = new ArrayList<>();
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != UP) {
+                String firstClause = -computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != UP && q != k) {
+                        firstClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                }
+                firstClause += "0";
+                resulStringList.add(firstClause);
+            }
+        }
+
+
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            if (k != UP) {
+                String secondClause = computePosition(i, j, k, numberLink) + " ";
+                for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                    if (q != UP && q != k) {
+                        secondClause += computePosition(i, j, q, numberLink) + " ";
+                    }
+                    secondClause += "0";
+                    resulStringList.add(secondClause);
+                }
+            }
+        }
+        return resulStringList;
+    }
+
+    private List<String> LUCorner_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resultStringList = new ArrayList<>();
+
+        //String first = "";
+        String first = computePosition(i, j, DOWN, numberLink) + " 0";
+        String second = computePosition(i, j, RIGHT, numberLink) + " 0";
+        resultStringList.add(first);
+        resultStringList.add(second);
+        return resultStringList;
+    }
+
+    private List<String> RUCorner_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resultStringList = new ArrayList<>();
+
+        //String first = "";
+        String first = computePosition(i, j, DOWN, numberLink) + " 0";
+        String second = computePosition(i, j, LEFT, numberLink) + " 0";
+        resultStringList.add(first);
+        resultStringList.add(second);
+        return resultStringList;
+    }
+
+    private List<String> RDCorner_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resultStringList = new ArrayList<>();
+
+        //String first = "";
+        String first = computePosition(i, j, UP, numberLink) + " 0";
+        String second = computePosition(i, j, LEFT, numberLink) + " 0";
+        resultStringList.add(first);
+        resultStringList.add(second);
+        return resultStringList;
+    }
+
+    private List<String> LDCorner_has_two_direction(int i, int j, NumberLink numberLink) {
+        List<String> resultStringList = new ArrayList<>();
+
+        //String first = "";
+        String first = computePosition(i, j, UP, numberLink) + " 0";
+        String second = computePosition(i, j, RIGHT, numberLink) + " 0";
+        resultStringList.add(first);
+        resultStringList.add(second);
+        return resultStringList;
+    }
 
     // X
-//    private List<String> has_two_directions(int i, int j, NumberLink numberLink) {
-//        List<String> resultStringList = new ArrayList<>();
-//
-//        // x1 -> (x2 v x3 v x4)
-//        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
-//            String firstClause = -computePosition(i, j, k, numberLink) + " ";
-//            for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
-//                if (q != k) {
-//                    firstClause += computePosition(i, j, q, numberLink) + " ";
-//                }
-//            }
-//            firstClause += "0";
-//            resultStringList.add(firstClause);
-//        }
-//        // -x1 -> (-x2 v -x3 v -x4)
-//        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
-//            String second = computePosition(i, j, k, numberLink) + " ";
-//            for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
-//                if (q != k) {
-//                    second += -computePosition(i, j, q, numberLink) + " ";
-//                }
-//            }
-//            second += "0";
-//            resultStringList.add(second);
-//        }
-//
-//        return resultStringList;
-//    }
+    private List<String> has_two_directions(int i, int j, NumberLink numberLink) {
+        List<String> resultStringList = new ArrayList<>();
+
+        // x1 -> (x2 v x3 v x4)
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            String firstClause = -computePosition(i, j, k, numberLink) + " ";
+            for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                if (q != k) {
+                    firstClause += computePosition(i, j, q, numberLink) + " ";
+                }
+            }
+            firstClause += "0";
+            resultStringList.add(firstClause);
+        }
+        // -x1 -> (-x2 v -x3 v -x4)
+        for (int k = 1; k <= NUM_OF_DIRECTION; k++) {
+            String second = computePosition(i, j, k, numberLink) + " ";
+            for (int q = 1; q <= NUM_OF_DIRECTION; q++) {
+                if (q != k) {
+                    second += -computePosition(i, j, q, numberLink) + " ";
+                }
+            }
+            second += "0";
+            resultStringList.add(second);
+        }
+
+        return resultStringList;
+    }
 
     // X Y
     private List<String> connect_same_number(int i, int j, NumberLink numberLink) {
@@ -452,12 +568,42 @@ public class CNFConverter {
 
     // X
     private String atLeastOneDirection(int i, int j, NumberLink numberLink) {
-        // x1 v x2 v x3 v x4
         String firstLine = "";
-        firstLine += calculatePosition(i, j, LEFT, numberLink, true);
-        firstLine += calculatePosition(i, j, RIGHT, numberLink, true);
-        firstLine += calculatePosition(i, j, UP, numberLink, true);
-        firstLine += calculatePosition(i, j, DOWN, numberLink, true);
+        if (isLUCornerCell(i, j)) {
+            firstLine += computePosition(i, j, RIGHT, numberLink) + " ";
+            firstLine += computePosition(i, j, DOWN, numberLink) + " ";
+        } else if (isRUCornerCell(i, j)) {
+            firstLine += computePosition(i, j, LEFT, numberLink) + " ";
+            firstLine += computePosition(i, j, DOWN, numberLink) + " ";
+        } else if (isRDCornerCell(i, j)) {
+            firstLine += computePosition(i, j, LEFT, numberLink) + " ";
+            firstLine += computePosition(i, j, UP, numberLink) + " ";
+        } else if (isLDCornerCell(i, j)) {
+            firstLine += computePosition(i, j, RIGHT, numberLink) + " ";
+            firstLine += computePosition(i, j, UP, numberLink) + " ";
+        } else if (isLEdgeCell(i, j)) {
+            firstLine += computePosition(i, j, RIGHT, numberLink) + " ";
+            firstLine += computePosition(i, j, UP, numberLink) + " ";
+            firstLine += computePosition(i, j, DOWN, numberLink) + " ";
+        } else if (isREdgeCell(i, j)) {
+            firstLine += computePosition(i, j, LEFT, numberLink) + " ";
+            firstLine += computePosition(i, j, UP, numberLink) + " ";
+            firstLine += computePosition(i, j, DOWN, numberLink) + " ";
+        } else if (isUEdgeCell(i, j)) {
+            firstLine += computePosition(i, j, RIGHT, numberLink) + " ";
+            firstLine += computePosition(i, j, LEFT, numberLink) + " ";
+            firstLine += computePosition(i, j, DOWN, numberLink) + " ";
+        } else if (isDEdgeCell(i, j)) {
+            firstLine += computePosition(i, j, RIGHT, numberLink) + " ";
+            firstLine += computePosition(i, j, UP, numberLink) + " ";
+            firstLine += computePosition(i, j, LEFT, numberLink) + " ";
+        } else {
+            // x1 v x2 v x3 v x4
+            firstLine += computePosition(i, j, LEFT, numberLink) + " ";
+            firstLine += computePosition(i, j, RIGHT, numberLink) + " ";
+            firstLine += computePosition(i, j, UP, numberLink) + " ";
+            firstLine += computePosition(i, j, DOWN, numberLink) + " ";
+        }
         firstLine += "0";
         return firstLine;
     }
@@ -508,14 +654,14 @@ public class CNFConverter {
 
     public int getValueOf(int row, int col, int positionValue, NumberLink numberLink) {
         int n = numberLink.getCol();
-        if (positionValue < n * (n - 1)) {
+        if (positionValue >= 1 && positionValue <= n * (n - 1)) {
             int JValue = (positionValue - 1) % (n - 1) + 1;
             if (JValue == col) {
                 return RIGHT;
             } else if (JValue + 1 == col) {
                 return LEFT;
             } else return 100;
-        } else if (positionValue < 2 * n * (n - 1)) {
+        } else if (positionValue <= 2 * n * (n - 1)) {
             int IValue = (positionValue - n * (n - 1) - 1) % (n - 1) + 1;
             if (IValue == row) {
                 return DOWN;
