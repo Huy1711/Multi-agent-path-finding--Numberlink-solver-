@@ -464,7 +464,7 @@ public class CNFConverter {
             i0 = DIR[k][0];
             j0 = DIR[k][1];
 
-            if ((k == RIGHT && (j + j0) <= m_limit[k]) || (k == LEFT && (j + j0) >= m_limit[k])) {
+            if ((k == RIGHT && (j + j0) <= m_limit[k])) {
 
                 for (int q = 1; q <= numberLink.getMaxNum(); q++) {
                     String tmpString = "";
@@ -474,19 +474,21 @@ public class CNFConverter {
                     tmpString += computePosition(i, j + j0, NUM_OF_DIRECTION + q, numberLink) + " ";
                     tmpString += "0";
                     resultStringList.add(tmpString);
+
+                    tmpString = "";
+                    // ô có có kết nối sang phải ^ ô bên phải có giá trị 7 -> ô có giá trị 7
+                    tmpString = -computePosition(i, j, k, numberLink) + " ";
+                    tmpString += -computePosition(i, j + j0, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    tmpString += computePosition(i, j, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    tmpString += "0";
+                    resultStringList.add(tmpString);
                 }
 
-//                for (int q = NUM_OF_DIRECTION + 1; q <= NUM_OF_DIRECTION + numberLink.getMaxNum(); q++) {
-//                    String tmpString = "";
-//                    // ô có có kết nối sang phải ^ ô bên phải có giá trị 7 -> ô có giá trị 7
-//                    tmpString = -computePosition(i, j, k, numberLink) + " ";
-//                    tmpString += -computePosition(i, j + j0, q, numberLink) + " ";
-//                    tmpString += computePosition(i, j, q, numberLink) + " ";
-//                    tmpString += "0";
-//                    resultStringList.add(tmpString);
-//                }
+                for (int q = NUM_OF_DIRECTION + 1; q <= NUM_OF_DIRECTION + numberLink.getMaxNum(); q++) {
 
-            } else if ((k == DOWN && i + i0 <= m_limit[k]) || (k == UP && i + i0 >= m_limit[k])) {
+                }
+
+            } else if ((k == DOWN && i + i0 <= m_limit[k])) {
 
                 for (int q = 1; q <= numberLink.getMaxNum(); q++) {
                     String tmpString = -computePosition(i, j, k, numberLink) + " ";
@@ -494,16 +496,16 @@ public class CNFConverter {
                     tmpString += computePosition(i + i0, j, NUM_OF_DIRECTION + q, numberLink) + " ";
                     tmpString += "0";
                     resultStringList.add(tmpString);
+
+                    tmpString = "";
+                    tmpString = -computePosition(i, j, k, numberLink) + " ";
+                    tmpString += -computePosition(i, j + j0, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    tmpString += computePosition(i, j, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    tmpString += "0";
+                    resultStringList.add(tmpString);
                 }
 
-//                for (int q = NUM_OF_DIRECTION + 1; q <= NUM_OF_DIRECTION + numberLink.getMaxNum(); q++) {
-//                    String tmpString = "";
-//                    tmpString = -computePosition(i, j, k, numberLink) + " ";
-//                    tmpString += -computePosition(i, j + j0, q, numberLink) + " ";
-//                    tmpString += computePosition(i, j, q, numberLink) + " ";
-//                    tmpString += "0";
-//                    resultStringList.add(tmpString);
-//                }
+
             }
 
         }
