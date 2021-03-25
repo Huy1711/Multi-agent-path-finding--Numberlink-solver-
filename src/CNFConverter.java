@@ -470,8 +470,8 @@ public class CNFConverter {
                     String tmpString = "";
                     // ô có giá trị 7 có kết nối sang phải -> ô bên phải có giá trị 7
                     tmpString = -computePosition(i, j, k, numberLink) + " ";
-                    tmpString += -computePositionY(i, j, q, numberLink) + " ";
-                    tmpString += computePositionY(i, j + j0, q, numberLink) + " ";
+                    tmpString += -computePosition(i, j, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    tmpString += computePosition(i, j + j0, NUM_OF_DIRECTION + q, numberLink) + " ";
                     tmpString += "0";
                     resultStringList.add(tmpString);
                 }
@@ -490,8 +490,8 @@ public class CNFConverter {
 
                 for (int q = 1; q <= numberLink.getMaxNum(); q++) {
                     String tmpString = -computePosition(i, j, k, numberLink) + " ";
-                    tmpString += -computePositionY(i, j, q, numberLink) + " ";
-                    tmpString += computePositionY(i + i0, j, q, numberLink) + " ";
+                    tmpString += -computePosition(i, j, NUM_OF_DIRECTION + q, numberLink) + " ";
+                    tmpString += computePosition(i + i0, j, NUM_OF_DIRECTION + q, numberLink) + " ";
                     tmpString += "0";
                     resultStringList.add(tmpString);
                 }
@@ -532,7 +532,7 @@ public class CNFConverter {
 
     // Y
     private List<String> valueFromInput(int i, int j, int num, NumberLink numberLink) {
-        int result = computePositionY(i, j, num, numberLink);
+        int result = computePosition(i, j, NUM_OF_DIRECTION + num, numberLink);
         List<String> resultStringList = new ArrayList<>();
 
         String exactNumLine = "";
@@ -548,16 +548,16 @@ public class CNFConverter {
         String exactNumLine = "";
 
         for (int k = 1; k <= numberLink.getMaxNum(); k++) {
-            exactNumLine += computePositionY(i, j, k, numberLink) + " ";
+            exactNumLine += computePosition(i, j, NUM_OF_DIRECTION + k, numberLink) + " ";
         }
         exactNumLine += "0";
         clauseArr.add(exactNumLine);
 
         for (int k = 1; k <= numberLink.getMaxNum(); k++) {
             for (int q = 1; q <= numberLink.getMaxNum(); q++) {
-                String firstClause = -computePositionY(i, j, k, numberLink) + " ";
+                String firstClause = -computePosition(i, j,NUM_OF_DIRECTION + k, numberLink) + " ";
                 if (q != k) {
-                    firstClause += -computePositionY(i, j, q, numberLink) + " ";
+                    firstClause += -computePosition(i, j, NUM_OF_DIRECTION + q, numberLink) + " ";
                     firstClause += "0";
                     clauseArr.add(firstClause);
                 }
@@ -622,12 +622,6 @@ public class CNFConverter {
             default:
                 return 2 * n * (n - 1) + n * (i - 1) * numberLink.getMaxNum() + (j - 1) * numberLink.getMaxNum() + value;
         }
-    }
-
-    private int computePositionY(int i, int j, int value, NumberLink numberLink) {
-        int maxK = numberLink.getMaxNum();
-        int n = numberLink.getCol();
-        return n * maxK * (i - 1) + (j - 1) * maxK + value + num_of_x;
     }
 
     private String calculatePosition(int i, int j, int value, NumberLink numberLink, boolean positive) {
