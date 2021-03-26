@@ -66,30 +66,30 @@ public class CNFConverter {
                 // blank cell
                 } else {
 
-//                    List<String> rule2 = new ArrayList<>();
-//                    if (isLUCornerCell(i, j)) {
-//                        rule2 = LUCorner_has_two_directions(i, j, numberLink);
-//                    } else if (isRUCornerCell(i, j)) {
-//                        rule2 = RUCorner_has_two_directions(i, j, numberLink);
-//                    } else if (isRDCornerCell(i, j)) {
-//                        rule2 = RDCorner_has_two_directions(i, j, numberLink);
-//                    } else if (isLDCornerCell(i, j)) {
-//                        rule2 = LDCorner_has_two_directions(i, j, numberLink);
-//                    } else if (isLEdgeCell(i, j)) {
-//                        rule2 = LEdge_has_two_directions(i, j, numberLink);
-//                    } else if (isREdgeCell(i, j)) {
-//                        rule2 = REdge_has_two_directions(i, j, numberLink);
-//                    } else if (isUEdgeCell(i, j)) {
-//                        rule2 = UEdge_has_two_directions(i, j, numberLink);
-//                    } else if (isDEdgeCell(i, j)) {
-//                        rule2 = DEdge_has_two_directions(i, j, numberLink);
-//                    } else {
-//                        rule2 = has_two_directions(i, j, numberLink);
-//                    }
-//
-//                    clauses += rule2.size();
-//
-//                    rules.addAll(rule2);
+                    List<String> rule2 = new ArrayList<>();
+                    if (isLUCornerCell(i, j)) {
+                        rule2 = LUCorner_has_two_directions(i, j, numberLink);
+                    } else if (isRUCornerCell(i, j)) {
+                        rule2 = RUCorner_has_two_directions(i, j, numberLink);
+                    } else if (isRDCornerCell(i, j)) {
+                        rule2 = RDCorner_has_two_directions(i, j, numberLink);
+                    } else if (isLDCornerCell(i, j)) {
+                        rule2 = LDCorner_has_two_directions(i, j, numberLink);
+                    } else if (isLEdgeCell(i, j)) {
+                        rule2 = LEdge_has_two_directions(i, j, numberLink);
+                    } else if (isREdgeCell(i, j)) {
+                        rule2 = REdge_has_two_directions(i, j, numberLink);
+                    } else if (isUEdgeCell(i, j)) {
+                        rule2 = UEdge_has_two_directions(i, j, numberLink);
+                    } else if (isDEdgeCell(i, j)) {
+                        rule2 = DEdge_has_two_directions(i, j, numberLink);
+                    } else {
+                        rule2 = has_two_directions(i, j, numberLink);
+                    }
+
+                    clauses += rule2.size();
+
+                    rules.addAll(rule2);
                 }
 
             }
@@ -135,11 +135,10 @@ public class CNFConverter {
     private List<String> LEdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
 
-        String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
             for (int q = k + 1; q <= NUM_OF_DIRECTION; q++) {
                 if (k != LEFT && q != LEFT) {
-                    secondClause = -computePosition(i, j, k, numberLink) + " ";
+                    String secondClause = -computePosition(i, j, k, numberLink) + " ";
                     if (q != k) {
                         secondClause += -computePosition(i, j, q, numberLink) + " ";
                         secondClause += "0";
@@ -155,11 +154,10 @@ public class CNFConverter {
     private List<String> REdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
 
-        String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
             for (int q = k + 1; q <= NUM_OF_DIRECTION; q++) {
                 if (k != RIGHT && q != RIGHT) {
-                    secondClause = -computePosition(i, j, k, numberLink) + " ";
+                    String secondClause = -computePosition(i, j, k, numberLink) + " ";
                     if (q != k) {
                         secondClause += -computePosition(i, j, q, numberLink) + " ";
                         secondClause += "0";
@@ -175,11 +173,10 @@ public class CNFConverter {
     private List<String> DEdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
 
-        String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
             for (int q = k + 1; q <= NUM_OF_DIRECTION; q++) {
                 if (k != DOWN && q != DOWN) {
-                    secondClause = -computePosition(i, j, k, numberLink) + " ";
+                    String secondClause = -computePosition(i, j, k, numberLink) + " ";
                     if (q != k) {
                         secondClause += -computePosition(i, j, q, numberLink) + " ";
                         secondClause += "0";
@@ -195,11 +192,10 @@ public class CNFConverter {
     private List<String> UEdge_exact_one_direction(int i, int j, NumberLink numberLink) {
         List<String> resultStringList = new ArrayList<>();
 
-        String secondClause = "";
         for (int k = 1; k <= NUM_OF_DIRECTION - 1; k++) {
             for (int q = k + 1; q <= NUM_OF_DIRECTION; q++) {
                 if (k != UP && q != UP) {
-                    secondClause = -computePosition(i, j, k, numberLink) + " ";
+                    String secondClause = -computePosition(i, j, k, numberLink) + " ";
                     if (q != k) {
                         secondClause += -computePosition(i, j, q, numberLink) + " ";
                         secondClause += "0";

@@ -83,38 +83,30 @@ public class Controller {
             int[] model = problem.model();
             int[][] board = numberLink.getInputs();
 
-            for (int row = 1; row < board.length; row++) {
-                List<Cell> cells = new ArrayList<>();
-                for (int col = 1; col < board[row].length; col++) {
-                    Cell cell = null;
-                    for (int k = 0; k < model.length; k++) {
-                        System.out.print(model[k] + " ");
-                        if (model[k] > 0) {
-                            int value = cnfConverter.getValueOfY(model[k], numberLink);
-                            if (value <= 4 && value >= 1) {
-//                                if (cell == null) {
-//                                    cell = new Cell(row - 1, col - 1, board[row][col]);
-//                                    cells.add(cell);
-//                                    cell.getPattern().add(value);
-//                                } else {
-//                                    cell.getPattern().add(value);
-//                                }
-                            } else if (value > 4 && value <= CNFConverter.NUM_OF_DIRECTION + numberLink.getMaxNum()) {
-                                if (cell == null) {
-                                    cell = new Cell(row - 1, col - 1, board[row][col]);
-                                    cells.add(cell);
-                                    cell.value = value;
-                                } else {
-                                    cell.value = value;
-                                }
-                            }
+            List<Cell> cells = new ArrayList<>();
+            int countBreak = 0;
+                for (int k = CNFConverter.num_of_x; k < model.length; k++) {
+//                    System.out.print(model[k] + " ");
+                    if (model[k] > 0) {
+
+                        int positionValue = model[k];
+                        int i = cnfConverter.getValueOfYI(positionValue, numberLink);
+                        int j = cnfConverter.getValueOfYJ(positionValue, numberLink);
+
+                        int breakPoint = (i - 1) % numberLink.getCol();
+                        int value = cnfConverter.getValueOfY(model[k], numberLink);
+
+                        if (breakPoint == countBreak) {
+                            System.out.println();
+                            countBreak++;
                         }
+
+                        System.out.print((value - 4) + " ");
                     }
-                }
-                response.getCells().add(cells);
+
+
             }
-            System.out.println();
-            printFormat(response);
+
         } else {
             System.out.println("UNSAT");
         }
