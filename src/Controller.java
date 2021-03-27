@@ -3,11 +3,10 @@ import org.sat4j.reader.DimacsReader;
 import org.sat4j.reader.ParseFormatException;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
 import org.sat4j.specs.TimeoutException;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -20,7 +19,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input 2/6x6 123.in");
+        File file = new File("./input 2/9x9 120.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -63,7 +62,6 @@ public class Controller {
         writer.close();
 
         // SAT Solve
-        NumberLinkResponse response = new NumberLinkResponse();
         DimacsReader reader = new DimacsReader(SolverFactory.newDefault());
         reader.parseInstance("text.cnf");
         satSolver = new SATSolver(reader);
@@ -80,15 +78,12 @@ public class Controller {
             System.out.println("Var: " + problem.nVars());
             System.out.println("Constraint: " + problem.nConstraints());
 
+
+
             int[] model = problem.model();
             int[][] board = numberLink.getInputs();
 
-            for (int k = 0; k < model.length; k++) {
-                System.out.print(model[k] + " ");
-            }
-            System.out.println();
 
-            List<Cell> cells = new ArrayList<>();
             int countBreak = 0;
                 for (int k = CNFConverter.num_of_x; k < model.length; k++) {
 
@@ -114,51 +109,11 @@ public class Controller {
 
         } else {
             System.out.println("UNSAT");
+            System.out.println("Var: " + problem.nVars());
+
         }
 
 
     }
 
-    public static void printFormat(NumberLinkResponse response) {
-        for (int i = 0; i < response.getCells().size(); i++) {
-            for (int j = 0; j < response.getCells().get(i).size(); j++) {
-
-                int num = response.getCells().get(i).get(j).getValue();
-                if (num <= 9) {
-                    System.out.print(num + " ");
-                } else {
-                    System.out.print(num);
-                }
-
-//                if (response.getCells().get(i).get(j).getPattern().size() == 1) {
-//                    int num = response.getCells().get(i).get(j).getValue();
-//                    if (num <= 9) {
-//                        System.out.print(num + " ");
-//                    } else {
-//                        System.out.print(num);
-//                    }
-//                } else if (response.getCells().get(i).get(j).getPattern().size() == 2) {
-//                    int first = response.getCells().get(i).get(j).getPattern().get(0);
-//                    int second = response.getCells().get(i).get(j).getPattern().get(1);
-//                    if (first == CNFConverter.LEFT && second == CNFConverter.RIGHT)
-//                        System.out.print("- ");
-//                    else if (first == CNFConverter.LEFT && second == CNFConverter.DOWN)
-//                        System.out.print("┐ ");
-//                    else if (first == CNFConverter.LEFT && second == CNFConverter.UP)
-//                        System.out.print("┘ ");
-//                    else if (first == CNFConverter.RIGHT && second == CNFConverter.DOWN)
-//                        System.out.print("┌ ");
-//                    else if (first == CNFConverter.RIGHT && second == CNFConverter.UP)
-//                        System.out.print("└ ");
-//                    else if (first == CNFConverter.UP && second == CNFConverter.DOWN)
-//                        System.out.print("│ ");
-//                } else {
-//                    System.out.print("* ");
-//                }
-
-            }
-            System.out.println();
-        }
-
-    }
 }

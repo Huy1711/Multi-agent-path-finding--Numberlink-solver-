@@ -1,7 +1,9 @@
+import com.sun.xml.internal.ws.api.model.wsdl.editable.EditableWSDLInput;
 import org.sat4j.reader.DimacsReader;
 import org.sat4j.reader.ParseFormatException;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
 
 import java.io.IOException;
 
