@@ -20,7 +20,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, TimeoutException, ParseFormatException, ContradictionException {
         // Doc tu file Text
-        File file = new File("./input 2/6x6 120.in");
+        File file = new File("./input 2/6x6 123.in");
         Scanner sc = new Scanner(file);
         NumberLink numberLink = new NumberLink();
         numberLink.setRow(sc.nextInt());
@@ -83,10 +83,15 @@ public class Controller {
             int[] model = problem.model();
             int[][] board = numberLink.getInputs();
 
+            for (int k = 0; k < model.length; k++) {
+                System.out.print(model[k] + " ");
+            }
+            System.out.println();
+
             List<Cell> cells = new ArrayList<>();
             int countBreak = 0;
                 for (int k = CNFConverter.num_of_x; k < model.length; k++) {
-//                    System.out.print(model[k] + " ");
+
                     if (model[k] > 0) {
 
                         int positionValue = model[k];
