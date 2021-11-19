@@ -76,3 +76,8 @@ sample input file:
   **Limit boundary:**  
     
   The directions of cells at the edge to the outside are disabled  
+  
+  Output sample:
+![image](https://user-images.githubusercontent.com/41891935/142607754-2fbf4ca5-ecda-4445-a74b-d75f645598bf.png)
+
+Project has been updated with more effective encoding rule at: https://github.com/kieuvantuyen01/propagationAlgorithm
